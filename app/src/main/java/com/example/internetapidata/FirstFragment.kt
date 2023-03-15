@@ -2,13 +2,12 @@ package com.example.internetapidata
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.internetapidata.databinding.FragmentFirstBinding
 
 /**
@@ -31,15 +30,18 @@ class FirstFragment : Fragment() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.status.observe(viewLifecycleOwner){
+        viewModel.status.observe(viewLifecycleOwner) {
             Log.d("Network", "Status: $it")
         }
-
+        viewModel.properties.observe(viewLifecycleOwner) {
+            val adapter = MarsAdapter()
+            binding.realStateRv.adapter = adapter
+            adapter.submitList(it)
+        }
     }
 
     override fun onDestroyView() {
